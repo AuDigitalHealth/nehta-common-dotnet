@@ -30,7 +30,9 @@ namespace Nehta.VendorLibrary.Common
             if (type == null) throw new ArgumentNullException("type");
             if (root == null) throw new ArgumentNullException("root");
 
-            var key = String.Format(CultureInfo.InvariantCulture, "{0}:{1}", type, root.ElementName);
+            //Added namespace into key to address incorrect namespace returned my HI Service
+            //var key = String.Format(CultureInfo.InvariantCulture, "{0}:{1}", type, root.ElementName);
+            var key = String.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", type, root.Namespace, root.ElementName);
 
             lock (SyncRoot)
             {

@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/AuDigitalHealth/nehta-common-dotnet</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Added license information</releaseNotes>
+    <releaseNotes>Added Fix for HI Service</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>ADHA Digital Health Nehta</tags>  
   </metadata>
