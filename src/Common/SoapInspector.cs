@@ -34,7 +34,12 @@ namespace Nehta.VendorLibrary.Common
         public static void InspectEndpoint(ServiceEndpoint endpoint, SoapMessages soapMessages)
         {
             InspectorBehavior newBehavior = new InspectorBehavior(soapMessages);
+
+#if NET40
             endpoint.Behaviors.Add(newBehavior);
+#else
+            endpoint.EndpointBehaviors.Add(newBehavior);
+#endif
         }
 
         /// <summary>
@@ -114,7 +119,11 @@ namespace Nehta.VendorLibrary.Common
 
             public void ApplyClientBehavior(ServiceEndpoint endpoint, System.ServiceModel.Dispatcher.ClientRuntime clientRuntime)
             {
+#if NET40
                 clientRuntime.MessageInspectors.Add(new MessageInspector(soapMessages));
+#else
+                clientRuntime.ClientMessageInspectors.Add(new MessageInspector(soapMessages));
+#endif
             }
 
             public void ApplyDispatchBehavior(ServiceEndpoint endpoint, System.ServiceModel.Dispatcher.EndpointDispatcher endpointDispatcher)
