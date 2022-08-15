@@ -1,5 +1,9 @@
 ### Change Log/Revision History
 
+4.3.0
+=====
+Added support for netstandard2.0
+
 4.2.1
 =====
 Fix for HI Service when running hi code continuously. Need to handle when 

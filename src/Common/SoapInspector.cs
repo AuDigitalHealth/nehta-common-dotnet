@@ -34,7 +34,7 @@ namespace Nehta.VendorLibrary.Common
         public static void InspectEndpoint(ServiceEndpoint endpoint, SoapMessages soapMessages)
         {
             InspectorBehavior newBehavior = new InspectorBehavior(soapMessages);
-            endpoint.Behaviors.Add(newBehavior);
+            endpoint.EndpointBehaviors.Add(newBehavior);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Nehta.VendorLibrary.Common
 
             public void ApplyClientBehavior(ServiceEndpoint endpoint, System.ServiceModel.Dispatcher.ClientRuntime clientRuntime)
             {
-                clientRuntime.MessageInspectors.Add(new MessageInspector(soapMessages));
+                clientRuntime.ClientMessageInspectors.Add(new MessageInspector(soapMessages));
             }
 
             public void ApplyDispatchBehavior(ServiceEndpoint endpoint, System.ServiceModel.Dispatcher.EndpointDispatcher endpointDispatcher)
