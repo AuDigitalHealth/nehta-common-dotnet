@@ -23,7 +23,7 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
