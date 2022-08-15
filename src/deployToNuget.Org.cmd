@@ -2,9 +2,8 @@ del *.nupkg
 
 msbuild /p:Configuration=Release
 
-NuGet.exe pack Common\Common.csproj  -Properties Configuration=Release
-
-pause
+REM NuGet.exe pack Common\Common.csproj
+REM Use dotnet for packaing now
+dotnet pack .\Common\Common.csproj -c Release -o .
 
 forfiles /m *.nupkg /c "cmd /c NuGet.exe push @FILE -Source https://www.nuget.org/api/v2/package"
-
