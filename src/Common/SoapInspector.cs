@@ -33,6 +33,10 @@ namespace Nehta.VendorLibrary.Common
         /// <param name="soapMessages">A SoapMessages instance which will contain the soap request and response messages on the endpoint.</param>
         public static void InspectEndpoint(ServiceEndpoint endpoint, SoapMessages soapMessages)
         {
+            if (endpoint == null) { 
+                throw new ArgumentNullException(nameof(endpoint));
+            }                         
+
             InspectorBehavior newBehavior = new InspectorBehavior(soapMessages);
             endpoint.EndpointBehaviors.Add(newBehavior);
         }

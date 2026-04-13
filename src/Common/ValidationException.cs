@@ -76,7 +76,7 @@ namespace Nehta.VendorLibrary.Common
             foreach (var message in Messages)
             {
                 if (message.Name != null)
-                    stringBuilder.Append(string.Format("{0} - {1}\n", message.Name, message.Message));
+                    stringBuilder.Append($"{message.Name} - {message.Message}\n");
                 else
                     stringBuilder.Append(message.Message);
             }

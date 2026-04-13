@@ -13,9 +13,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Security.Cryptography.Xml;
 
@@ -45,6 +42,10 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>Element with the matching ID.</returns>
         public override XmlElement GetIdElement(XmlDocument document, string idValue)
         {
+            if (document == null) { 
+                throw new ArgumentNullException(nameof(document), "XmlDocument must not be null");
+            }
+
             // Create the namespace manager for XPathing
             XmlNamespaceManager xnm = new XmlNamespaceManager(document.NameTable);
             xnm.AddNamespace("xml", XmlNamespace);
@@ -56,12 +57,13 @@ namespace Nehta.VendorLibrary.Common
 
                 if (foundElem == null)
                 {
-                    throw new ApplicationException("Error finding an element: Element with xml:id '" + idValue + "' not found");
+                    throw new XmlException($"Error finding an element: Element with xml:id '{idValue}' not found");
                 }
 
                 // Return the found element
                 return (XmlElement)foundElem;
-            } else return null;
+            }
+            else return null;
         }
     }
 }

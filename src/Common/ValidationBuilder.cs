@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Globalization;
 
 namespace Nehta.VendorLibrary.Common
 {
@@ -18,7 +19,8 @@ namespace Nehta.VendorLibrary.Common
         /// <summary>
         /// The path to the property that is currently being validated
         /// </summary>
-        public string Path {
+        public string Path
+        {
             get
             {
                 return _path;
@@ -42,15 +44,15 @@ namespace Nehta.VendorLibrary.Common
                 if (string.IsNullOrEmpty(_path))
                     return string.Empty;
 
-                if (_path.LastIndexOf(".") > 0)
+                if (_path.LastIndexOf('.') > 0)
                 {
-                    return _path.Substring(0, _path.LastIndexOf("."));
+                    return _path.Substring(0, _path.LastIndexOf('.'));
                 }
-                
+
                 return string.Empty;
             }
         }
-        
+
         /// <summary>
         /// The list of validation messages
         /// </summary>
@@ -111,11 +113,11 @@ namespace Nehta.VendorLibrary.Common
         {
             Messages.Add
                 (new ValidationMessage
-                    {
-                        Name = name,
-                        Value = value,
-                        Message = message
-                    }
+                {
+                    Name = name,
+                    Value = value,
+                    Message = message
+                }
                 );
         }
 
@@ -129,22 +131,22 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>A boolean indicating if the validation passed</returns>
         public bool RangeCheck(string name, ICollection value, int min, int max)
         {
-          if (value == null) return false;
+            if (value == null) return false;
 
             if (value.Count < min || value.Count > max)
             {
                 Messages.Add
                     (new ValidationMessage
-                        {
-                            Name = Path + name,
-                            Value = null,
-                            Message = string.Format("Number of items must be between {0} to {1} (inclusive)", min, max)
-                        }
+                    {
+                        Name = Path + name,
+                        Value = null,
+                        Message = $"Number of items must be between {min} to {max} (inclusive)"
+                    }
                     );
 
                 return false;
             }
-            
+
             return true;
         }
 
@@ -165,11 +167,11 @@ namespace Nehta.VendorLibrary.Common
             {
                 Messages.Add
                     (new ValidationMessage
-                        {
-                            Name = Path + name,
-                            Value = value,
-                            Message = string.Format("Value must not be: {0}", expected)
-                        }
+                    {
+                        Name = Path + name,
+                        Value = value,
+                        Message = $"Value must not be: {expected}"
+                    }
                     );
 
                 return false;
@@ -192,16 +194,16 @@ namespace Nehta.VendorLibrary.Common
             {
                 Messages.Add
                 (new ValidationMessage
-                        {
-                            Name = Path + name,
-                            Value = value,
-                            Message = string.Format("Expected: {1} - Value: {0}", value, expected)
-                        }
+                {
+                    Name = Path + name,
+                    Value = value,
+                    Message = $"Expected: {expected} - Value: {value}"
+                }
                 );
 
                 return false;
             }
-            
+
             return true;
         }
 
@@ -241,22 +243,22 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>A boolean indicating if the validation passed.</returns>
         public bool HpioOidCheck(string name, string value, bool required)
         {
-             if (required && !ArgumentRequiredCheck(name, value))
+            if (required && !ArgumentRequiredCheck(name, value))
                 return false;
 
-             if (!Regex.IsMatch(value, @"^(\d+\.)+800362\d{10}$"))
-             {
-                 Messages.Add(
-                     new ValidationMessage()
-                     {
-                         Name = Path + name,
-                         Value = value,
-                         Message = "Argument must be an OID qualified HPIO number"
-                     });
-                 return false;
-             }
+            if (!Regex.IsMatch(value, @"^(\d+\.)+800362\d{10}$"))
+            {
+                Messages.Add(
+                    new ValidationMessage()
+                    {
+                        Name = Path + name,
+                        Value = value,
+                        Message = "Argument must be an OID qualified HPIO number"
+                    });
+                return false;
+            }
 
-             return true;
+            return true;
         }
 
         /// <summary>
@@ -409,16 +411,16 @@ namespace Nehta.VendorLibrary.Common
             {
                 Messages.Add
                     (new ValidationMessage
-                        {
-                            Name = Path + name,
-                            Value = value,
-                            Message = "Argument is required"
-                        }
+                    {
+                        Name = Path + name,
+                        Value = value,
+                        Message = "Argument is required"
+                    }
                     );
 
                 return false;
             }
-            
+
             return true;
         }
 
@@ -436,7 +438,7 @@ namespace Nehta.VendorLibrary.Common
                     new ValidationMessage()
                     {
                         Name = Path + name,
-                        Value = date.ToString(),
+                        Value = date.ToString(CultureInfo.InvariantCulture),
                         Message = "Argument is required"
                     }
                     );
@@ -481,7 +483,7 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>A boolean indicating if the validation passed</returns>
         public bool ArgumentRequiredCheck(string name, object value, string message)
         {
-            if (value == null || (value is string && ((string)value).Trim() == string.Empty))
+            if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
             {
                 Messages.Add
                     (
@@ -508,7 +510,7 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>A boolean indicating if the validation passed</returns>
         public bool ArgumentRequiredCheck(string name, Enum value)
         {
-            if (value.ToString().ToUpper() == "UNDEFINED")
+            if (string.Equals(value.ToString(), "UNDEFINED", StringComparison.OrdinalIgnoreCase))
             {
                 Messages.Add(new ValidationMessage()
                 {
@@ -537,11 +539,11 @@ namespace Nehta.VendorLibrary.Common
             {
                 Messages.Add
                     (new ValidationMessage
-                        {
-                            Name = Path + name,
-                            Value = value,
-                            Message = "Argument is required"
-                        }
+                    {
+                        Name = Path + name,
+                        Value = value,
+                        Message = "Argument is required"
+                    }
                     );
 
                 return false;
@@ -563,7 +565,7 @@ namespace Nehta.VendorLibrary.Common
 
             foreach (KeyValuePair<string, object> pair in nameValues)
             {
-                if (pair.Value is string && ((string)pair.Value).Trim() != string.Empty)
+                if (pair.Value is string && !string.IsNullOrEmpty(((string)pair.Value).Trim()))
                 {
                     chosenCount++;
                 }
@@ -579,11 +581,11 @@ namespace Nehta.VendorLibrary.Common
             {
                 Messages.Add
                     (new ValidationMessage
-                        {
-                            Name = namesList.Substring(2),
-                            Value = null,
-                            Message = "One (and only one) of these must be specified"
-                        }
+                    {
+                        Name = namesList.Substring(2),
+                        Value = null,
+                        Message = "One (and only one) of these must be specified"
+                    }
                     );
 
                 return false;

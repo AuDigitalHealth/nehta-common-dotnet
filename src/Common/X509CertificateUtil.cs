@@ -37,6 +37,11 @@ namespace Nehta.VendorLibrary.Common
         public static X509SubjectKeyIdentifierExtension GetSubjectKeyIdentifier(
           X509Certificate2 certificate)
         {
+            if (certificate == null)
+            {
+                throw new ArgumentNullException(nameof(certificate));
+            }
+
             return (X509SubjectKeyIdentifierExtension)
               certificate.Extensions[SubjectKeyIdentifierOid];
         }
@@ -74,7 +79,7 @@ namespace Nehta.VendorLibrary.Common
                 return true;
             }
 
-            if (cert1.GetRawCertData().Length != cert2.GetRawCertData().Length)
+            if (cert1?.GetRawCertData().Length != cert2?.GetRawCertData().Length)
             {
                 return false;
             }
@@ -97,8 +102,9 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>String containing the SKI value of the certificate.</returns>
         public static string GetCertificateSKI(X509Certificate2 cert)
         {
+
             X509SubjectKeyIdentifierExtension ext = new X509SubjectKeyIdentifierExtension();
-            if (cert.Extensions["2.5.29.14"] != null)
+            if (cert != null && cert.Extensions["2.5.29.14"] != null)
             {
                 X509Extension xex = cert.Extensions["2.5.29.14"];
                 ext = (X509SubjectKeyIdentifierExtension)xex;

@@ -27,8 +27,8 @@ namespace Nehta.VendorLibrary.Common
         /// <returns></returns>
         public static XmlSerializer Create(Type type, XmlRootAttribute root)
         {
-            if (type == null) throw new ArgumentNullException("type");
-            if (root == null) throw new ArgumentNullException("root");
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (root == null) throw new ArgumentNullException(nameof(root));
 
             //Added namespace into key to address incorrect namespace returned my HI Service
             //var key = String.Format(CultureInfo.InvariantCulture, "{0}:{1}", type, root.ElementName);

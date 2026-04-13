@@ -9,16 +9,16 @@
         /// <summary>
         /// The name of the property that was validated
         /// </summary>
-        public string Name;
-        
+        public string Name { get; set; }
+
         /// <summary>
         /// The value of the property at the time of validation
         /// </summary>
-        public object Value;
+        public object Value { get; set; }
 
         /// <summary>
         /// The validation message
         /// </summary>
-        public string Message;
+        public string Message { get; set; }
     }
 }

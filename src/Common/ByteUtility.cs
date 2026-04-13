@@ -15,6 +15,7 @@
 using System;
 using System.Text;
 using System.Security.Cryptography;
+using System.Globalization;
 
 namespace Nehta.VendorLibrary.Common
 {
@@ -33,7 +34,7 @@ namespace Nehta.VendorLibrary.Common
             StringBuilder sb = new StringBuilder(ba.Length * 2);
             foreach (byte b in ba)
             {
-                sb.AppendFormat("{0:x2}", b);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", b);
             }
             return sb.ToString();
         }
@@ -82,6 +83,7 @@ namespace Nehta.VendorLibrary.Common
                     index++;
                 }
             }
+            rng.Dispose();
 
             return randomBytes;
         }

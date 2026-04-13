@@ -34,7 +34,9 @@ namespace Nehta.VendorLibrary.Common
         public static T Deserialize<T>(this XmlDocument document)
         {
             if (document.DocumentElement == null)
+            {
                 throw new ArgumentException(Properties.Resources.InvalidDocumentAttribute);
+            }
 
             XmlReader reader = document.CreateNavigator().ReadSubtree();
             // ReSharper disable PossibleNullReferenceException
@@ -42,7 +44,7 @@ namespace Nehta.VendorLibrary.Common
             // ReSharper restore PossibleNullReferenceException
             rootAttr.Namespace = document.DocumentElement.NamespaceURI;
             //XmlSerializer xs = new XmlSerializer(typeof(T), rootAttr); -- Use new CachingXmlSerializerFactory class
-            var xs = CachingXmlSerializerFactory.Create(typeof(T), rootAttr);
+            var xs = CachingXmlSerializerFactory.Create<T>(rootAttr);
             object rv = xs.Deserialize(reader);
 
             return (T)rv;
@@ -56,11 +58,16 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>The deserialized object.</returns>
         public static T Deserialize<T>(this XmlElement element)
         {
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
             XmlReader reader = element.CreateNavigator().ReadSubtree();
             XmlRootAttribute rootAttr = new XmlRootAttribute(element.LocalName);
             rootAttr.Namespace = element.NamespaceURI;
             //XmlSerializer xs = new XmlSerializer(typeof(T), rootAttr);  -- Use new CachingXmlSerializerFactory class
-            var xs = CachingXmlSerializerFactory.Create(typeof(T), rootAttr);
+            var xs = CachingXmlSerializerFactory.Create<T>(rootAttr);
             object rv = xs.Deserialize(reader);
 
             return (T)rv;
@@ -73,10 +80,15 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>Xml of the serialized object.</returns>
         public static XmlDocument SerializeToXml(this Object report)
         {
+            if (report == null)
+            {
+                throw new ArgumentNullException(nameof(report));
+            }
+
             // Get XmlTypeAttribute
             XmlTypeAttribute xta = Attribute.GetCustomAttribute(report.GetType(), typeof(XmlTypeAttribute)) as XmlTypeAttribute;
             if (xta == null) throw new ArgumentException(Properties.Resources.InvalidDocumentAttribute);
-            
+
             // Get XmlRootAttribute
             XmlRootAttribute xra = Attribute.GetCustomAttribute(report.GetType(), typeof(XmlRootAttribute)) as XmlRootAttribute;
             if (xra == null) xra = new XmlRootAttribute();
@@ -95,7 +107,7 @@ namespace Nehta.VendorLibrary.Common
             var xmlSerializer = CachingXmlSerializerFactory.Create(report.GetType(), xra);
             xmlSerializer.Serialize(xmlw, report, xsn);
             xmlw.Close();
-
+            
             output.LoadXml(sb.ToString());
 
             return output;
@@ -109,7 +121,7 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>Xml of the serialized object.</returns>
         public static XmlDocument SerializeToXml(this Object report, string documentElementName)
         {
-          if (documentElementName.IsNullOrEmptyWhitespace())
+            if (documentElementName.IsNullOrEmptyWhitespace())
                 throw new ArgumentException(Properties.Resources.InvalidDocumentAttribute);
 
             XmlTypeAttribute xta = Attribute.GetCustomAttribute(report.GetType(), typeof(XmlTypeAttribute)) as XmlTypeAttribute;
@@ -129,7 +141,7 @@ namespace Nehta.VendorLibrary.Common
             XmlWriter xmlw = XmlWriter.Create(sb);
 
             //XmlSerializer xmlSerializer = new XmlSerializer(report.GetType(), xmlRoot);    -- Use new CachingXmlSerializerFactory class         
-            var xmlSerializer = CachingXmlSerializerFactory.Create(report.GetType(), xmlRoot); 
+            var xmlSerializer = CachingXmlSerializerFactory.Create(report.GetType(), xmlRoot);
             xmlSerializer.Serialize(xmlw, report, xsn);
             xmlw.Close();
 
@@ -171,13 +183,13 @@ namespace Nehta.VendorLibrary.Common
             Func<TAttribute, TValue> valueSelector)
             where TAttribute : Attribute
         {
-          var att = type.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() as TAttribute;
+            var att = type.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() as TAttribute;
 
-          if (att != null)
-          {
-            return valueSelector(att);
-          }
-          return default(TValue);
+            if (att != null)
+            {
+                return valueSelector(att);
+            }
+            return default(TValue);
         }
 
         /// <summary>
@@ -206,7 +218,7 @@ namespace Nehta.VendorLibrary.Common
                 attribute = implementedInterface.GetCustomAttributes(typeof(T), false).Cast<T>().SingleOrDefault();
             }
 
-            return attribute == null ? default(TExpected) : expression(attribute);
+            return (attribute == null) ? default(TExpected) : expression(attribute);
         }
 
         /// <summary>
@@ -216,18 +228,7 @@ namespace Nehta.VendorLibrary.Common
         /// <returns>Indicate if string is null, empty or whitespace.</returns>
         public static bool IsNullOrEmptyWhitespace(this string value)
         {
-            if (value == null)
-            {
-                return true;
-            }
-            else if (value.Trim() == string.Empty)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return string.IsNullOrWhiteSpace(value);
         }
     }
 }

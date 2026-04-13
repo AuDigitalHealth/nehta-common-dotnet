@@ -1,5 +1,21 @@
 ### Change Log/Revision History
 
+5.0.0
+=====
+Target framework changes:
+net45 -> net472
+(+) net10.0
+
+Packages:
+System.Security.Cryptography.Xml 9.0.0 -> 10.0.5
+System.ServiceModel.Primitives 4.9.0 -> 10.0.652802
+(+) System.ServiceModel.Http 10.0.652802
+
+4.3.1
+=====
+Updated packages to latest compatible version.
+    - System.Security.Cryptography.Xml 6.0.0 --> 9.0.0
+
 4.3.0
 =====
 Added support for netstandard2.0

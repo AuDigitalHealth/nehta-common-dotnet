@@ -14,11 +14,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Nehta.VendorLibrary.Common.Properties;
-using System.Text.RegularExpressions;
 using System.Collections;
+using System.Globalization;
 
 namespace Nehta.VendorLibrary.Common
 {
@@ -36,7 +34,7 @@ namespace Nehta.VendorLibrary.Common
         public static void ValidateStringMatch(string name, string value, string expected)
         {
             if (value != expected)
-                throw new ArgumentException(string.Format("{0} should match value of '{1}'", name, expected), name);
+                throw new ArgumentException($"{name} should match value of '{expected}'", name);
         }
 
         /// <summary>
@@ -51,7 +49,7 @@ namespace Nehta.VendorLibrary.Common
 
             foreach (KeyValuePair<string, object> pair in nameValues)
             {
-                if (pair.Value is string && ((string)pair.Value).Trim() != string.Empty)
+                if (pair.Value is string && !string.IsNullOrEmpty(((string)pair.Value).Trim()))
                     isValid = true;
                 else if (!(pair.Value is string) && pair.Value != null)
                     isValid = true;
@@ -80,9 +78,9 @@ namespace Nehta.VendorLibrary.Common
         /// </summary>
         /// <param name="name">The name of the argument to validate.</param>
         /// <param name="value">The value of the argument to validate.</param>
-        public static void ValidateArgumentRequired(string name, object value) 
+        public static void ValidateArgumentRequired(string name, object value)
         {
-            if (value == null || (value is string && ((string)value).Trim() == string.Empty))
+            if (value == null || (value is string && string.IsNullOrWhiteSpace((string)value)))
                 throw new ArgumentException(Resources.ParameterRequired, name);
         }
 
@@ -167,7 +165,7 @@ namespace Nehta.VendorLibrary.Common
         {
             if (required) ValidateArgumentRequired(name, value);
 
-            if (!value.StartsWith("urn:uuid:"))
+            if (!value.StartsWith("urn:uuid:", StringComparison.Ordinal))
                 throw new ArgumentException(Resources.ParameterInvalidUUID, name);
         }
 
@@ -181,7 +179,7 @@ namespace Nehta.VendorLibrary.Common
         {
             if (required) ValidateArgumentRequired(name, value);
 
-            if (!value.StartsWith(HIQualifiers.HPIIQualifier))
+            if (!value.StartsWith(HIQualifiers.HPIIQualifier, System.StringComparison.Ordinal))
                 throw new ArgumentException(string.Format(Resources.ParameterInvalidHPII, HIQualifiers.HPIIQualifier), name);
         }
 
@@ -195,8 +193,9 @@ namespace Nehta.VendorLibrary.Common
         {
             if (required) ValidateArgumentRequired(name, value);
 
-            if (!value.StartsWith(HIQualifiers.HPIOQualifier))
+            if (!value.StartsWith(HIQualifiers.HPIOQualifier, System.StringComparison.Ordinal))
                 throw new ArgumentException(string.Format(Resources.ParameterInvalidHPIO, HIQualifiers.HPIOQualifier), name);
+
         }
 
         /// <summary>
@@ -209,7 +208,7 @@ namespace Nehta.VendorLibrary.Common
         {
             if (required) ValidateArgumentRequired(name, value);
 
-            if (!value.StartsWith(HIQualifiers.IHIQualifier))
+            if (!value.StartsWith(HIQualifiers.IHIQualifier, System.StringComparison.Ordinal))
                 throw new ArgumentException(string.Format(Resources.ParameterInvalidIHI, HIQualifiers.IHIQualifier), name);
         }
 
@@ -239,7 +238,7 @@ namespace Nehta.VendorLibrary.Common
         public static void ValidateStringLength(string name, string value, int length, bool required)
         {
             if (required) ValidateArgumentRequired(name, value);
-            
+
             if (!string.IsNullOrEmpty(value) && value.Length != length)
                 throw new ArgumentException(string.Format(Resources.ParameterStringLength, length), name);
         }
@@ -270,7 +269,7 @@ namespace Nehta.VendorLibrary.Common
 
                     for (int i = 14; i >= 0; i--)
                     {
-                        int curr = Convert.ToInt32(healthIdentifier.Substring(i, 1));
+                        int curr = Convert.ToInt32(healthIdentifier.Substring(i, 1), CultureInfo.InvariantCulture);
                         if (mod2)
                         {
                             curr *= 2;
@@ -280,20 +279,21 @@ namespace Nehta.VendorLibrary.Common
                         mod2 = !mod2;
                         sum += curr;
                     }
-                    int check = Convert.ToInt32(sum.ToString().Substring(sum.ToString().Length - 1, 1));
+                    var sumString = sum.ToString(CultureInfo.InvariantCulture);
+                    int check = Convert.ToInt32(sumString.Substring(sumString.Length - 1, 1), CultureInfo.InvariantCulture);
                     if (check > 0)
                         check = 10 - check;
 
-                    healthIdentifierOutput = healthIdentifier + check.ToString();
+                    healthIdentifierOutput = healthIdentifier + check.ToString(CultureInfo.InvariantCulture);
                 }
                 catch (Exception)
                 {
-                    throw new Exception(string.Format("ERROR calcualting health identifier LUNH check digit: {0}", healthIdentifier));
+                    throw new ArgumentException($"ERROR calcualting health identifier LUNH check digit: {healthIdentifier}");
                 }
             }
             else
             {
-                throw new ArgumentException(string.Format("INVALID Health Identifier - must be 15 digits : {0}", healthIdentifier));
+                throw new ArgumentException($"INVALID Health Identifier - must be 15 digits : {healthIdentifier}");
             }
 
             return (healthIdentifierOutput);
@@ -332,8 +332,5 @@ namespace Nehta.VendorLibrary.Common
 
             return (generatedHealthIdentifier == healthIdentifierWithLuhnCheckDigit);
         }
-
-        
-
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Nehta.VendorLibrary.Common
+﻿namespace Nehta.VendorLibrary.Common
 {
     /// <summary>
     /// Defines the qualifiers for Health Identifiers.
@@ -13,17 +8,17 @@ namespace Nehta.VendorLibrary.Common
         /// <summary>
         /// Qualifier for an Individual Healthcare Identifier.
         /// </summary>
-        public static string IHIQualifier = "http://ns.electronichealth.net.au/id/hi/ihi/1.0/";
+        public static readonly string IHIQualifier = "http://ns.electronichealth.net.au/id/hi/ihi/1.0/";
 
         /// <summary>
         /// Qualifier for a Health Provider Identifier - Organisation.
         /// </summary>
-        public static string HPIOQualifier = "http://ns.electronichealth.net.au/id/hi/hpio/1.0/";
+        public static readonly string HPIOQualifier = "http://ns.electronichealth.net.au/id/hi/hpio/1.0/";
 
         /// <summary>
         /// Qualifier for a Health Provider Identifier - Individual.
         /// </summary>
-        public static string HPIIQualifier = "http://ns.electronichealth.net.au/id/hi/hpii/1.0/";
+        public static readonly string HPIIQualifier = "http://ns.electronichealth.net.au/id/hi/hpii/1.0/";
     }
 
     /// <summary>
@@ -34,11 +29,11 @@ namespace Nehta.VendorLibrary.Common
         /// <summary>
         /// Qualifier for an ELS Cert Ref.
         /// </summary>
-        public static string Qualifier = "http://ns.electronichealth.net.au/smd/qcr/use/payload/keyenc/2010";
+        public static readonly string Qualifier = "http://ns.electronichealth.net.au/smd/qcr/use/payload/keyenc/2010";
 
-        /// <summary>
+        /// <summary>   
         /// Type of an ELS Cert Ref.
         /// </summary>
-        public static string Type = "http://ns.electronichealth.net.au/qcr/type/pem/2010";
+        public static readonly string Type = "http://ns.electronichealth.net.au/qcr/type/pem/2010";
     }
 }
