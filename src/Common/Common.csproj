@@ -15,7 +15,7 @@
   </PropertyGroup>
   <!-- Package and assembly information -->
   <PropertyGroup>
-    <Version>5.0.0.0</Version>
+    <Version>5.0.1.0</Version>
     <Description>Common library used by all Agency code</Description>
     <Company>Australian Digital Health Agency</Company>
     <Authors>$(Company)</Authors>
@@ -29,7 +29,7 @@
     <Content Include="..\..\LICENSE.txt" Link="Properties\LICENSE.txt" PackagePath="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.5" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.8" />
     <PackageReference Include="System.ServiceModel.Http" Version="10.0.652802" />
   </ItemGroup>
   <ItemGroup>
